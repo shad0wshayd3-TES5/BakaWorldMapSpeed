@@ -5,8 +5,8 @@ set_xmakever("2.8.2")
 includes("lib/commonlibsse")
 
 -- set project
-set_project("commonlibsse-template")
-set_version("0.0.0")
+set_project("BakaWorldMapSpeed")
+set_version("1.0.0")
 set_license("GPL-3.0")
 
 -- set defaults
@@ -18,21 +18,21 @@ add_rules("mode.debug", "mode.releasedbg")
 add_rules("plugin.vsxmake.autoupdate")
 
 -- set policies
+set_policy("build.optimization.lto", true)
 set_policy("package.requires_lock", true)
 
 -- set configs
-set_config("skyrim_ae", true)
+set_config("commonlib_json", true)
 
 -- targets
-target("commonlibsse-template")
+target("BakaWorldMapSpeed")
     -- add dependencies to target
     add_deps("commonlibsse")
 
     -- add commonlibsse plugin
     add_rules("commonlibsse.plugin", {
-        name = "commonlibsse-template",
-        author = "libxse",
-        description = "SKSE64 plugin template using CommonLibSSE"
+        name = "BakaWorldMapSpeed",
+        author = "shad0wshayd3"
     })
 
     -- add src files
@@ -40,3 +40,6 @@ target("commonlibsse-template")
     add_headerfiles("src/**.h")
     add_includedirs("src")
     set_pcxxheader("src/pch.h")
+
+    -- add extra files
+    add_extrafiles(".clang-format")
