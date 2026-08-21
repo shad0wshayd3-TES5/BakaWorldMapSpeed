@@ -1,36 +1,18 @@
-#include <nlohmann/json.hpp>
-
 namespace REX::JSON
 {
-	using map_t = std::map<std::string, float>;
-
-	namespace Impl
-	{
-		template <>
-		void SettingLoad<map_t>(
-			void* a_data,
-			path_t a_path,
-			map_t& a_value,
-			map_t& a_valueDefault)
-		{
-			const auto& json = *static_cast<nlohmann::json*>(a_data);
-			a_value = json.value<map_t>(a_path, a_valueDefault);
-		}
-
-		template <>
-		void SettingSave<map_t>(void*, path_t, map_t&)
-		{
-			return;
-		}
-	}
+	template <class T, class U, class Store = SettingStore>
+	using Map = Setting<std::map<T, U>, Store>;
 
 	template <class Store = SettingStore>
-	using Map = Setting<map_t, Store>;
+	using MapStrF32 = Map<std::string, float, Store>;
+
+	template void SettingLoad<std::map<std::string, float>>(void*, path_t, std::map<std::string, float>&, std::map<std::string, float>&);
+	template void SettingSave<std::map<std::string, float>>(void*, path_t, std::map<std::string, float>&);
 }
 
 namespace JSON
 {
-	static REX::JSON::Map WorldSpaces{ "worldSpaces", {} };
+	static REX::JSON::MapStrF32 WorldSpaces{ "worldSpaces", {} };
 
 	static void Init()
 	{
