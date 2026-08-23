@@ -18,24 +18,24 @@ namespace Hooks
 		{
 			if (a_event && a_event->menuName == "MapMenu"sv)
 			{
-				if (auto ui = RE::UI::GetSingleton())
+				if (a_event->opening)
 				{
-					if (auto mapMenu = ui->GetMenu<RE::MapMenu>();
-						mapMenu && mapMenu->worldSpace)
+					if (auto ui = RE::UI::GetSingleton())
 					{
-						auto iter = Settings::Runtime.worldSpaces.find(mapMenu->worldSpace->editorID.c_str());
-						if (iter != Settings::Runtime.worldSpaces.end())
+						if (auto mapMenu = ui->GetMenu<RE::MapMenu>();
+							mapMenu && mapMenu->worldSpace)
 						{
-							if (a_event->opening)
+							auto iter = Settings::Runtime.worldSpaces.find(mapMenu->worldSpace->editorID.c_str());
+							if (iter != Settings::Runtime.worldSpaces.end())
 							{
 								SetValues(iter->second, iter->second);
 							}
-							else
-							{
-								SetValues(MinPanSpeed, MaxPanSpeed);
-							}
 						}
 					}
+				}
+				else
+				{
+					SetValues(MinPanSpeed, MaxPanSpeed);
 				}
 			}
 
