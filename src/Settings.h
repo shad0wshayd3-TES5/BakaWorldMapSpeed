@@ -9,13 +9,10 @@ struct SettingsImpl
 
 namespace Settings
 {
-	namespace Runtime
-	{
-		static SettingsImpl WorldSpaces;
-	}
+	static SettingsImpl Runtime;
 
 	inline void Load()
 	{
-		(void)glz::read_file_json(Runtime::WorldSpaces, "Data/SKSE/plugins/BakaWorldMapSpeed.json", std::string{});
+		(void)glz::read_file_json(Runtime, "Data/SKSE/plugins/BakaWorldMapSpeed.json", std::string{});
 	}
 }

@@ -7,23 +7,28 @@ namespace Hooks
 		public REX::TSingleton<MenuOpenCloseHandler>
 	{
 	public:
+		static void Install()
+		{
+			GetValues();
+			if (auto ui = RE::UI::GetSingleton())
+				ui->AddEventSink<RE::MenuOpenCloseEvent>(GetSingleton());
+		}
+
 		virtual RE::BSEventNotifyControl ProcessEvent(const RE::MenuOpenCloseEvent* a_event, RE::BSTEventSource<RE::MenuOpenCloseEvent>*) override
 		{
-			if (a_event && a_event->menuName == "MapMenu")
+			if (a_event && a_event->menuName == "MapMenu"sv)
 			{
 				if (auto ui = RE::UI::GetSingleton())
 				{
-					if (auto menu = ui->GetMenu<RE::MapMenu>();
-						menu && menu->worldSpace)
+					if (auto mapMenu = ui->GetMenu<RE::MapMenu>();
+						mapMenu && mapMenu->worldSpace)
 					{
-						auto map = Settings::Runtime::WorldSpaces.worldSpaces;
-						auto eid = menu->worldSpace->editorID.c_str();
-						if (map.contains(eid))
+						auto iter = Settings::Runtime.worldSpaces.find(mapMenu->worldSpace->editorID.c_str());
+						if (iter != Settings::Runtime.worldSpaces.end())
 						{
 							if (a_event->opening)
 							{
-								const auto value = static_cast<float>(map[eid]);
-								SetValues(value, value);
+								SetValues(iter->second, iter->second);
 							}
 							else
 							{
@@ -37,6 +42,7 @@ namespace Hooks
 			return RE::BSEventNotifyControl::kContinue;
 		}
 
+	private:
 		static void SetValues(float a_min, float a_max)
 		{
 			if (auto ini = RE::INISettingCollection::GetSingleton())
@@ -62,15 +68,6 @@ namespace Hooks
 		inline static auto MinPanSpeed{ 60000.0f };
 		inline static auto MaxPanSpeed{ 75000.0f };
 	};
-
-	static void Install()
-	{
-		if (auto ui = RE::UI::GetSingleton())
-		{
-			MenuOpenCloseHandler::GetValues();
-			ui->AddEventSink<RE::MenuOpenCloseEvent>(MenuOpenCloseHandler::GetSingleton());
-		}
-	}
 }
 
 namespace
@@ -83,7 +80,7 @@ namespace
 			Settings::Load();
 			break;
 		case SKSE::MessagingInterface::kDataLoaded:
-			Hooks::Install();
+			Hooks::MenuOpenCloseHandler::Install();
 			break;
 		default:
 			break;
