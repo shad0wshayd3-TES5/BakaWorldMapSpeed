@@ -12,8 +12,8 @@ set_warnings("allextra")
 add_rules("mode.debug", "mode.releasedbg")
 add_rules("plugin.vsxmake.autoupdate")
 
--- set configs
-set_config("commonlib_json", true)
+-- require package dependencies
+add_requires("glaze v7.0.0")
 
 -- define targets
 target("BakaWorldMapSpeed")
@@ -21,6 +21,9 @@ target("BakaWorldMapSpeed")
         name = "BakaWorldMapSpeed",
         author = "shad0wshayd3"
     })
+
+    -- bind package dependencies
+    add_packages("glaze")
 
     -- add src files
     add_files("src/**.cpp")
