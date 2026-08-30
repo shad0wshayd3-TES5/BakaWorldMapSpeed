@@ -33,6 +33,3 @@ target("BakaWorldMapSpeed")
 
     -- add extra files
     add_extrafiles(".clang-format")
-
-    -- add install files
-    add_installfiles("res/*.json", { prefixdir = "SKSE/Plugins" })
